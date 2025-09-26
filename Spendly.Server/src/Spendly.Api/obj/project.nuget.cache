@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "vj+LNXex2w4=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Noremi\\source\\repos\\Spendly\\Spendly.Server\\src\\Spendly.Api\\Spendly.Api.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Noremi\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.8\\microsoft.aspnetcore.openapi.9.0.8.nupkg.sha512",
+    "C:\\Users\\Noremi\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
