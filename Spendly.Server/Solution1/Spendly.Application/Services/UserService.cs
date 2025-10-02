@@ -23,9 +23,10 @@ namespace Spendly.Application.Services
             await _unitOfWork.Users.AddAsync(newUser);
             await _unitOfWork.SaveChangesAsync();
 
-            return newUser.UserMapToDto();
-        }
+            var response = new UserResponseDto();
 
+            return response;
+        }
 
         public async Task<UserResponseDto> GetByIdAsync(Guid id)
         {
