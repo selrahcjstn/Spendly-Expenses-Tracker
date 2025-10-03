@@ -1,7 +1,7 @@
 ﻿using Spendly.Application.Dtos;
 using Spendly.Domain.Entities;
 
-namespace Spendly.Application.Mappings
+namespace Spendly.Application.Common.Mappings
 {
     public static class UserMappings
     {

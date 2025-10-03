@@ -17,11 +17,12 @@
             Username = username;
             Email = email;
             Password = password;
+            CreatedAt = DateTime.UtcNow;
         }
 
         public void UpdateEmail(string email)
         {
-            if (string.IsNullOrEmpty(email) || email.Contains('@'))
+            if (string.IsNullOrEmpty(email) || !email.Contains('@'))
                 throw new ArgumentException("Invalid email format!");
 
             Email = email;

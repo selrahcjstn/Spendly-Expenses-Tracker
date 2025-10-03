@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Spendly.Domain.Entities;
 
-namespace Spendly.Infrastructure.Persistence
+namespace Spendly.Infrastructure.Persistence.Database
 {
     public class ApplicationDbContext : DbContext
     {

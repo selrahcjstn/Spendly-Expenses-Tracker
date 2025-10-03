@@ -1,7 +1,7 @@
 ﻿using Spendly.Application.Interfaces.IRepositories;
-using Spendly.Infrastructure.Persistence;
+using Spendly.Infrastructure.Persistence.Database;
 
-namespace Spendly.Infrastructure.Repositories
+namespace Spendly.Infrastructure.Persistence.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
