@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Spendly.Application.Interfaces.IRepositories;
 using Spendly.Domain.Entities;
-using Spendly.Infrastructure.Persistence;
+using Spendly.Infrastructure.Persistence.Database;
 
-namespace Spendly.Infrastructure.Repositories
+namespace Spendly.Infrastructure.Persistence.Repositories
 {
     public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
     {

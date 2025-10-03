@@ -1,11 +1,12 @@
-﻿using Spendly.Application.Dtos;
+﻿using Spendly.Application.Common.Result;
+using Spendly.Application.Dtos;
 
 namespace Spendly.Application.Interfaces.IServices
 {
     public interface IUserService
     {
-        Task<UserResponseDto> GetByIdAsync(Guid id);
-        Task<UserResponseDto> AddAsync(UserCreateRequestDto dto);
-        Task<UserResponseDto> UpdateEmailAsync(UpdateEmailRequestDto dto);
+        Task<Result<UserResponseDto>> GetByIdAsync(Guid id);
+        Task<Result<UserResponseDto>> AddAsync(CreateUserRequestDto dto);
+        Task<Result<UserResponseDto>> UpdateEmailAsync(UpdateEmailRequestDto dto);
     }
 }

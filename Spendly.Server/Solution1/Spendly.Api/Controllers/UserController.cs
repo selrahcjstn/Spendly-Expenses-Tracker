@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Spendly.Application.Common.Enums;
+using Spendly.Application.Common.Result;
 using Spendly.Application.Dtos;
 using Spendly.Application.Interfaces.IServices;
 
@@ -13,51 +15,55 @@ namespace Spendly.Api.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<UserResponseDto>> GetById(Guid id)
         {
-            try
-            {
-                var result = await _userService.GetByIdAsync(id);
+            var result = await _userService.GetByIdAsync(id);
 
-                return Ok(result);
-            }
-            catch (KeyNotFoundException ex)
+            if (!result.IsSuccess)
             {
-                return NotFound(ex.Message);
+                return result.ErrorType switch
+                {
+                    ErrorType.NotFound => NotFound(result.ErrorMessage),
+                    _ => BadRequest(result.ErrorMessage)
+                };
             }
+
+            return Ok(result.Value);
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserResponseDto>> Create([FromBody] UserCreateRequestDto dto)
+        public async Task<ActionResult<UserResponseDto>> Create([FromBody] CreateUserRequestDto dto)
         {
-            try
-            {
-                var result = await _userService.AddAsync(dto);
+            var result = await _userService.AddAsync(dto);
 
-                return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
-            }
-            catch (ArgumentException ex)
+            if (!result.IsSuccess)
             {
-                return BadRequest(ex.Message);
+                return result.ErrorType switch
+                {
+                    ErrorType.Conflict => Conflict(result.ErrorMessage),
+                    ErrorType.BadRequest => BadRequest(result.ErrorMessage),
+                    _ => BadRequest(result.ErrorMessage)
+                };
             }
+
+            return CreatedAtAction(nameof(GetById), new { id = result.Value!.Id }, result.Value);
         }
 
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<UserResponseDto>> UpdateEmail(Guid id, [FromBody] UpdateEmailRequestDto dto)
         {
-            try
-            {
-                dto.Id = id;
-                var result = await _userService.UpdateEmailAsync(dto);
+            dto.Id = id;
+            var result = await _userService.UpdateEmailAsync(dto);
 
-                return Ok(result);
-            }
-            catch (ArgumentException ex)
+            if (!result.IsSuccess)
             {
-                return BadRequest(ex.Message);
+                return result.ErrorType switch
+                {
+                    ErrorType.NotFound => NotFound(result.ErrorMessage),
+                    ErrorType.BadRequest => BadRequest(result.ErrorMessage),
+                    _ => BadRequest(result.ErrorMessage)
+                };
             }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+
+            return Ok(result.Value);
         }
     }
 }
