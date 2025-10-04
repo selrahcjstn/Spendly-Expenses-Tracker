@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Spendly.Application.Common.Enums;
-using Spendly.Application.Common.Result;
 using Spendly.Application.Dtos;
 using Spendly.Application.Interfaces.IServices;
 
