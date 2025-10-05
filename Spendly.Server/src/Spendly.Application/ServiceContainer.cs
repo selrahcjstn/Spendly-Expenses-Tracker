@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Spendly.Application.Interfaces.IServices;
 using Spendly.Application.Services;
+using Spendly.Domain.Entities;
 
 namespace Spendly.Application
 {
@@ -9,9 +11,12 @@ namespace Spendly.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddValidatorsFromAssembly(typeof(ServiceContainer).Assembly);
-
+            // Services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+
+            // password hashing
+            services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 
             return services;
         }

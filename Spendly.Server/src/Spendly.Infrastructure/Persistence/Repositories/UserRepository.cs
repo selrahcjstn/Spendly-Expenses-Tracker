@@ -24,16 +24,22 @@ namespace Spendly.Infrastructure.Persistence.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Username == user);
         }
 
-        public Task AddAsync(User user)
+        public async Task<User?> GetByEmailOrUserAsync(string user, string email)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == user || u.Email == email);
+        }
+
+        public Task Add(User user)
         {
             _context.Users.Add(user);
             return Task.CompletedTask;
         }
 
-        public Task UpdateAsync(User user)
+        public Task Update(User user)
         {
             _context.Users.Update(user);
             return Task.CompletedTask;
-        }
+        } 
     }
 }

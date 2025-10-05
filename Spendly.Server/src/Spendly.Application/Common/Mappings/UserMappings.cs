@@ -1,4 +1,4 @@
-﻿using Spendly.Application.Dtos;
+﻿using Spendly.Application.Dtos.User;
 using Spendly.Domain.Entities;
 
 namespace Spendly.Application.Common.Mappings

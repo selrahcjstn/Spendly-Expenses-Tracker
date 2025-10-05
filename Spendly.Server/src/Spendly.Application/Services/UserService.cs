@@ -1,79 +1,65 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
+﻿using Microsoft.AspNetCore.Identity;
 using Spendly.Application.Common.Enums;
 using Spendly.Application.Common.Mappings;
 using Spendly.Application.Common.Result;
-using Spendly.Application.Dtos;
+using Spendly.Application.Dtos.User;
 using Spendly.Application.Interfaces.IRepositories;
 using Spendly.Application.Interfaces.IServices;
 using Spendly.Domain.Entities;
 
 namespace Spendly.Application.Services
 {
-    public class UserService(IUnitOfWork unitOfWork, IValidator<CreateUserRequestDto> validator) : IUserService
+    public class UserService(IUnitOfWork unitOfWork, IPasswordHasher<User> hasher) : IUserService
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
-        private readonly IValidator<CreateUserRequestDto> _validator = validator;
+        private readonly IPasswordHasher<User> _hasher = hasher;
 
         public async Task<Result<UserResponseDto>> AddAsync(CreateUserRequestDto dto)
         {
-            // DTO Validation
-            var result = await _validator.ValidateAsync(dto);
-            if (!result.IsValid)
-            {
-                var errors = string.Join(", ", result.Errors.Select(e => e.ErrorMessage));
-                return Result<UserResponseDto>.Failure(ErrorType.BadRequest, errors);
-            }
+            var existingUser = await _unitOfWork.Users.GetByEmailOrUserAsync(dto.Username, dto.Email);
 
-            // Repository Validation
-            if (await _unitOfWork.Users.GetByUserAsync(dto.Username) is not null)
-                return Result<UserResponseDto>.Failure(ErrorType.Conflict, "Username already exist!");
+            if (existingUser?.Username == dto.Username)
+                return Result<UserResponseDto>.Failure(ErrorType.Conflict, "Username already exists!");
 
-            if (await _unitOfWork.Users.GetByEmailAsync(dto.Email) is not null)
-                return Result<UserResponseDto>.Failure(ErrorType.Conflict, "Email already exist!");
+            if (existingUser?.Email == dto.Email)
+                return Result<UserResponseDto>.Failure(ErrorType.Conflict, "Email already exists!");
 
-            // Dto to Entity Mapping with domain method
-            var newUser = new User(dto.Username, dto.Email, dto.Password);
+            var newUser = new User(dto.Username, dto.Email, "");
+            newUser.Password = _hasher.HashPassword(newUser, dto.Password);
 
-            // Saving to database using repository and UnitOfWork
-            await _unitOfWork.Users.AddAsync(newUser);
+            await _unitOfWork.Users.Add(newUser);
             await _unitOfWork.SaveChangesAsync();
 
-            // Mapping back to DTO for the response
-            var response = newUser.UserMapToDto();
-
-            // Return response to the controller
-            return Result<UserResponseDto>.Success(response);
+            return Result<UserResponseDto>.Success(newUser.UserMapToDto());
         }
 
         public async Task<Result<UserResponseDto>> GetByIdAsync(Guid id)
         {
-           var existingUser = await _unitOfWork.Users.GetByIdAsync(id);
-           if(existingUser == null)
-                return Result<UserResponseDto>.Failure(ErrorType.NotFound, "User Not Found");
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
 
-            var response = existingUser.UserMapToDto();
+            if (user == null)
+                return Result<UserResponseDto>.Failure(ErrorType.NotFound, "User not found");
 
-            return Result<UserResponseDto>.Success(response);
+            return Result<UserResponseDto>.Success(user.UserMapToDto());
         }
 
         public async Task<Result<UserResponseDto>> UpdateEmailAsync(UpdateEmailRequestDto dto)
         {
-            var result = await _unitOfWork.Users.GetByEmailAsync(dto.Email);
-            if (result != null)
-                return Result<UserResponseDto>.Failure(ErrorType.Conflict, "Email address already exist");
+            var emailExists = await _unitOfWork.Users.GetByEmailAsync(dto.Email);
+            if (emailExists != null)
+                return Result<UserResponseDto>.Failure(ErrorType.Conflict, "Email address already exists");
 
             var user = await _unitOfWork.Users.GetByIdAsync(dto.Id);
             if (user == null)
-                return Result<UserResponseDto>.Failure(ErrorType.NotFound, "User not found!");
+                return Result<UserResponseDto>.Failure(ErrorType.NotFound, "User not found");
 
             user.UpdateEmail(dto.Email);
 
+            await _unitOfWork.Users.Update(user);
             await _unitOfWork.SaveChangesAsync();
 
-            var response = user.UserMapToDto();
-
-            return Result<UserResponseDto>.Success(response);
+            return Result<UserResponseDto>.Success(user.UserMapToDto());
         }
     }
 }
+

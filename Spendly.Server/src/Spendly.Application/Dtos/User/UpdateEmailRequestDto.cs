@@ -1,4 +1,4 @@
-﻿namespace Spendly.Application.Dtos
+﻿namespace Spendly.Application.Dtos.User
 {
     public class UpdateEmailRequestDto
     {

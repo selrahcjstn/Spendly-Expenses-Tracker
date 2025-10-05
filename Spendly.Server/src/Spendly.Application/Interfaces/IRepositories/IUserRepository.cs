@@ -7,7 +7,8 @@ namespace Spendly.Application.Interfaces.IRepositories
         Task<User?> GetByIdAsync(Guid id);
         Task<User?> GetByEmailAsync(string email);
         Task<User?> GetByUserAsync(string user);
-        Task AddAsync(User user);
-        Task UpdateAsync(User user);
+        Task<User?> GetByEmailOrUserAsync(string user, string email);
+        Task Add(User user);
+        Task Update(User user);
     }
 }

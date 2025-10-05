@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Spendly.Application.Dtos;
+using Spendly.Application.Dtos.User;
 
 namespace Spendly.Application.Validators.User
 {
