@@ -3,6 +3,7 @@
     public interface IUnitOfWork
     {
         IUserRepository Users { get; }
+        IProfileRepository Profiles { get; }
         Task SaveChangesAsync();
     }
 }

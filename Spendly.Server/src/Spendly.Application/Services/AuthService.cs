@@ -24,7 +24,7 @@ namespace Spendly.Application.Services
             if(passwordValid != PasswordVerificationResult.Success)
                 return Result<UserResponseDto>.Failure(ErrorType.Unauthorized, "Invalid Email or Password");
 
-            var response = user.UserMapToDto();
+            var response = user.MapToUserDto();
 
             return Result<UserResponseDto>.Success(response);
         }

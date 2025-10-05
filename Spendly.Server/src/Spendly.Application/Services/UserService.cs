@@ -14,23 +14,27 @@ namespace Spendly.Application.Services
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IPasswordHasher<User> _hasher = hasher;
 
-        public async Task<Result<UserResponseDto>> AddAsync(CreateUserRequestDto dto)
+        public async Task<Result<CreateUserResponseDto>> AddAsync(CreateUserRequestDto dto)
         {
             var existingUser = await _unitOfWork.Users.GetByEmailOrUserAsync(dto.Username, dto.Email);
 
             if (existingUser?.Username == dto.Username)
-                return Result<UserResponseDto>.Failure(ErrorType.Conflict, "Username already exists!");
+                return Result<CreateUserResponseDto>.Failure(ErrorType.Conflict, "Username already exists!");
 
             if (existingUser?.Email == dto.Email)
-                return Result<UserResponseDto>.Failure(ErrorType.Conflict, "Email already exists!");
+                return Result<CreateUserResponseDto>.Failure(ErrorType.Conflict, "Email already exists!");
 
-            var newUser = new User(dto.Username, dto.Email, "");
-            newUser.Password = _hasher.HashPassword(newUser, dto.Password);
+            var user = new User(dto.Username, dto.Email, "");
+            user.Password = _hasher.HashPassword(user, dto.Password);
 
-            await _unitOfWork.Users.Add(newUser);
+            var profile = new Profile(dto.Firstname, dto.LastName, dto.MiddleName, dto.Sex, dto.BirthDate);
+
+            user.AddProfile(profile);
+
+            await _unitOfWork.Users.Add(user);
             await _unitOfWork.SaveChangesAsync();
 
-            return Result<UserResponseDto>.Success(newUser.UserMapToDto());
+            return Result<CreateUserResponseDto>.Success(user.UserMapToDto());
         }
 
         public async Task<Result<UserResponseDto>> GetByIdAsync(Guid id)
@@ -40,7 +44,7 @@ namespace Spendly.Application.Services
             if (user == null)
                 return Result<UserResponseDto>.Failure(ErrorType.NotFound, "User not found");
 
-            return Result<UserResponseDto>.Success(user.UserMapToDto());
+            return Result<UserResponseDto>.Success(user.MapToUserDto());
         }
 
         public async Task<Result<UserResponseDto>> UpdateEmailAsync(UpdateEmailRequestDto dto)
@@ -58,7 +62,7 @@ namespace Spendly.Application.Services
             await _unitOfWork.Users.Update(user);
             await _unitOfWork.SaveChangesAsync();
 
-            return Result<UserResponseDto>.Success(user.UserMapToDto());
+            return Result<UserResponseDto>.Success(user.MapToUserDto());
         }
     }
 }

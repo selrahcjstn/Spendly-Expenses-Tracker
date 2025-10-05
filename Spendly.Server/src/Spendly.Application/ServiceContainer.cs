@@ -14,6 +14,7 @@ namespace Spendly.Application
             // Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IProfileService, ProfileService>();
 
             // password hashing
             services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();

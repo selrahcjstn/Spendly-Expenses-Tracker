@@ -8,11 +8,13 @@ namespace Spendly.Infrastructure.Persistence.Repositories
         private readonly ApplicationDbContext _context;
 
         public IUserRepository Users { get; }
+        public IProfileRepository Profiles { get; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
             Users = new UserRepository(_context);
+            Profiles = new ProfileRepostory(_context);
         }
 
         public async Task SaveChangesAsync()

@@ -9,6 +9,9 @@
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
+        // Navigation
+        public Profile? Profile { get; set; }
+
         public User() { }
 
         public User(string username, string email, string password)
@@ -18,6 +21,12 @@
             Email = email;
             Password = password;
             CreatedAt = DateTime.UtcNow;
+        }
+
+        public void AddProfile(Profile profile)
+        {
+            Profile = profile;
+            Profile.SetUser(this);
         }
 
         public void UpdateEmail(string email)
