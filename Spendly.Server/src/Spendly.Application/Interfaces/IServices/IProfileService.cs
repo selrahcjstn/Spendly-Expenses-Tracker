@@ -6,7 +6,7 @@ namespace Spendly.Application.Interfaces.IServices
 {
     public interface IProfileService
     {
-        Task<Result<Profile>> GetProfileByIdAsync(Guid id);
-        Task<Result<Profile>> UpdateProfileAsync(ProfileRequestDto dto);
+        Task<Result<ProfileResponseDto>> GetProfileByIdAsync(Guid id);
+        Task<Result<ProfileResponseDto>> UpdateProfileAsync(ProfileRequestDto dto);
     }
 }

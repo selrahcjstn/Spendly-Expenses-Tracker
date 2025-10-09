@@ -1,4 +1,6 @@
 ﻿using Spendly.Application.Common.Enums;
+using Spendly.Application.Dtos.Profile;
+using Spendly.Domain.Entities;
 
 namespace Spendly.Application.Common.Result
 {

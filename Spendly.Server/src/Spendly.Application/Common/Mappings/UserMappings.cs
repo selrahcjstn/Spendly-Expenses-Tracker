@@ -6,7 +6,7 @@ namespace Spendly.Application.Common.Mappings
 {
     public static class UserMappings
     {
-        public static CreateUserResponseDto UserMapToDto(this User user)
+        public static CreateUserResponseDto MapToUserWithProfileDto(this User user)
         {
             return new CreateUserResponseDto
             {
@@ -18,16 +18,12 @@ namespace Spendly.Application.Common.Mappings
             };
         }
 
-        public static ProfileResponseDto ToDto(this Profile profile)
+        public static SearchUserResponseDto MapToSearchUserResponseDto(this User user)
         {
-            return new ProfileResponseDto
+            return new SearchUserResponseDto
             {
-                Id = profile.Id,
-                Firstname = profile.Firstname,
-                LastName = profile.LastName,
-                MiddleName = profile.MiddleName,
-                Sex = profile.Sex,
-                BirthDate = profile.BirthDate,
+                Username = user.Username,
+                Email = user.Email,
             };
         }
 

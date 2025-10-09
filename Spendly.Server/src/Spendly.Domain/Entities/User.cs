@@ -9,9 +9,12 @@
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        // Navigation
+        // Profile
         public Profile? Profile { get; set; }
 
+        // Expenses one to many
+        public ICollection<Expense> Expenses { get; set; } = [];
+        
         public User() { }
 
         public User(string username, string email, string password)

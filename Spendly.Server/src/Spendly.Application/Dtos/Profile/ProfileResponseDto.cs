@@ -1,4 +1,6 @@
-﻿namespace Spendly.Application.Dtos.Profile
+﻿using Spendly.Application.Dtos.User;
+
+namespace Spendly.Application.Dtos.Profile
 {
     public class ProfileResponseDto
     {
@@ -8,5 +10,7 @@
         public string? MiddleName { get; set; }
         public string Sex { get; set; } = string.Empty;
         public DateOnly BirthDate { get; set; }
+        public Guid UserId { get; set; }
+        public SearchUserResponseDto? User { get; set; }
     }
 }

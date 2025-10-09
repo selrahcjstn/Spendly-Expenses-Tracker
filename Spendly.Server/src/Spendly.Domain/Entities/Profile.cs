@@ -10,6 +10,7 @@
         public string Sex { get; set; } = string.Empty;
         public DateOnly BirthDate { get; set; }
 
+        // Profile one to one to user
         public Guid UserId { get; set; }
         public User User { get; set; } = null!;
 

@@ -4,6 +4,7 @@
     {
         IUserRepository Users { get; }
         IProfileRepository Profiles { get; }
+        IExpenseRepository Expenses { get; }
         Task SaveChangesAsync();
     }
 }

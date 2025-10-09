@@ -34,7 +34,7 @@ namespace Spendly.Application.Services
             await _unitOfWork.Users.Add(user);
             await _unitOfWork.SaveChangesAsync();
 
-            return Result<CreateUserResponseDto>.Success(user.UserMapToDto());
+            return Result<CreateUserResponseDto>.Success(user.MapToUserWithProfileDto());
         }
 
         public async Task<Result<UserResponseDto>> GetByIdAsync(Guid id)
