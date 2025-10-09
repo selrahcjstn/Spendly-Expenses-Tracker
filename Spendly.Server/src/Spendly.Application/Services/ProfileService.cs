@@ -22,7 +22,7 @@ namespace Spendly.Application.Services
             if (user == null)
                 return Result<ProfileResponseDto>.Failure(ErrorType.NotFound, "The profile doesn't have an account yet");
 
-            var newProfile = profile.ToDto();
+            var newProfile = profile.MapToProfileResponse();
 
             return Result<ProfileResponseDto>.Success(newProfile);
         }

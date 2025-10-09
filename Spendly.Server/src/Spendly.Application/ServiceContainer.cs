@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Spendly.Application.Interfaces.IServices;
 using Spendly.Application.Services;
@@ -19,6 +18,9 @@ namespace Spendly.Application
 
             // password hashing
             services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
+
+            // JWT Service
+            services.AddSingleton<IJwtService, JwtService>();
 
             return services;
         }

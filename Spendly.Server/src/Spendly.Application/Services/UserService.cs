@@ -34,7 +34,7 @@ namespace Spendly.Application.Services
             await _unitOfWork.Users.Add(user);
             await _unitOfWork.SaveChangesAsync();
 
-            return Result<CreateUserResponseDto>.Success(user.MapToUserWithProfileDto());
+            return Result<CreateUserResponseDto>.Success(user.MapToUserEntity());
         }
 
         public async Task<Result<UserResponseDto>> GetByIdAsync(Guid id)
@@ -44,7 +44,7 @@ namespace Spendly.Application.Services
             if (user == null)
                 return Result<UserResponseDto>.Failure(ErrorType.NotFound, "User not found");
 
-            return Result<UserResponseDto>.Success(user.MapToUserDto());
+            return Result<UserResponseDto>.Success(user.MapToUserToResponse());
         }
 
         public async Task<Result<UserResponseDto>> UpdateEmailAsync(UpdateEmailRequestDto dto)
@@ -62,7 +62,7 @@ namespace Spendly.Application.Services
             await _unitOfWork.Users.Update(user);
             await _unitOfWork.SaveChangesAsync();
 
-            return Result<UserResponseDto>.Success(user.MapToUserDto());
+            return Result<UserResponseDto>.Success(user.MapToUserToResponse());
         }
     }
 }

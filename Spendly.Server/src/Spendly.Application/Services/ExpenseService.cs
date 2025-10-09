@@ -17,7 +17,6 @@ namespace Spendly.Application.Services
             var expense = new Expense(dto.Title, dto.Amount, dto.Description)
             {
                 UserId = dto.UserId,
-                Category = dto.Category,
             };
 
             await _unitOfWork.Expenses.AddAsync(expense);

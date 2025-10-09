@@ -10,6 +10,6 @@ namespace Spendly.Application.Dtos.User
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        public ProfileResponseDto? Profile { get; set; }
+        public ProfileRegistrationResponse? Profile { get; set; }
     }
 }

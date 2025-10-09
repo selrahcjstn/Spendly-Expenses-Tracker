@@ -12,6 +12,7 @@ namespace Spendly.Application.Dtos.Expense
         public DateTime? UpdatedAt { get; set; } 
 
         // Category many to many
-        public ICollection<ExpensesCategory> Category { get; set; } = [];
+        public ICollection<ExpenseCategoryDto> Category { get; set; } = [];
+
     }
 }

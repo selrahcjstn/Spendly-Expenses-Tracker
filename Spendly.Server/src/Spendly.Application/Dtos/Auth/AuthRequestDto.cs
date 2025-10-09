@@ -1,4 +1,4 @@
-﻿namespace Spendly.Application.Dtos.User
+﻿namespace Spendly.Application.Dtos.Auth
 {
     public class AuthRequestDto
     {

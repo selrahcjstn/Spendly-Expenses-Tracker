@@ -10,6 +10,6 @@ namespace Spendly.Application.Dtos.Expense
         public string? Description { get; set; }
 
         // Category many to many
-        public ICollection<ExpensesCategory> Category { get; set; } = [];
+        public ICollection<ExpenseCategoryDto> Category { get; set; } = [];
     }
 }

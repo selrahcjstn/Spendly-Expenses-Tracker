@@ -1,4 +1,5 @@
-﻿using Spendly.Application.Dtos.Profile;
+﻿using Spendly.Application.Dtos.Auth;
+using Spendly.Application.Dtos.Profile;
 using Spendly.Application.Dtos.User;
 using Spendly.Domain.Entities;
 
@@ -6,7 +7,7 @@ namespace Spendly.Application.Common.Mappings
 {
     public static class UserMappings
     {
-        public static CreateUserResponseDto MapToUserWithProfileDto(this User user)
+        public static CreateUserResponseDto MapToUserEntity(this User user)
         {
             return new CreateUserResponseDto
             {
@@ -14,7 +15,7 @@ namespace Spendly.Application.Common.Mappings
                 Username = user.Username,
                 Email = user.Email,
                 CreatedAt = user.CreatedAt,
-                Profile = user.Profile?.ToDto(),
+                Profile = user.Profile?.MapToRegistrationResponse(),
             };
         }
 
@@ -27,7 +28,7 @@ namespace Spendly.Application.Common.Mappings
             };
         }
 
-        public static UserResponseDto MapToUserDto(this User user)
+        public static UserResponseDto MapToUserToResponse(this User user)
         {
             return new UserResponseDto
             {
@@ -37,5 +38,7 @@ namespace Spendly.Application.Common.Mappings
                 CreatedAt = user.CreatedAt,
             };
         }
+
+        
     }
 }
