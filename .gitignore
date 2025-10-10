@@ -8,6 +8,10 @@
 *.userosscache
 *.sln.docstates
 
+# ASP.NET Core configuration
+appsettings.json
+appsettings.Development.json
+
 # Build results
 [Dd]ebug/
 [Rr]elease/

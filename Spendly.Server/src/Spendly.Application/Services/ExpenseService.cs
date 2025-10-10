@@ -8,15 +8,16 @@ using Spendly.Domain.Entities;
 
 namespace Spendly.Application.Services
 {
-    public class ExpenseService(IUnitOfWork unitOfWork) : IExpenseService
+    public class ExpenseService(IUnitOfWork unitOfWork, IJwtService jwtService) : IExpenseService
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IJwtService _jwtService = jwtService;
 
         public async Task<Result<ExpenseResponseDto>> AddExpenseAsync(ExpenseRequestDto dto)
         {
             var expense = new Expense(dto.Title, dto.Amount, dto.Description)
             {
-                UserId = dto.UserId,
+                UserId = _jwtService.GetUserId()
             };
 
             await _unitOfWork.Expenses.AddAsync(expense);
@@ -29,10 +30,15 @@ namespace Spendly.Application.Services
 
         public async Task<Result<object>> DeleteExpenseAsync(Guid id)
         {
+            var userId = _jwtService.GetUserId();
             var expense = await _unitOfWork.Expenses.GetByIdAsync(id);  
+
             if(expense == null)
                 return Result<object>.Failure(ErrorType.NotFound, "Expense Id Not Found!");
             
+            if(expense.UserId != userId)
+                return Result<object>.Failure(ErrorType.Forbidden, "You do not own this expense");
+
             await _unitOfWork.Expenses.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
 
@@ -41,8 +47,10 @@ namespace Spendly.Application.Services
 
         public async Task<Result<IEnumerable<ExpenseResponseDto>>> GetAllExpensesAsync()
         {
-            var expenses = await _unitOfWork.Expenses.GetAllAsync();
-            if (expenses == null || expenses.Any())
+            var userId = _jwtService.GetUserId();
+
+            var expenses = await _unitOfWork.Expenses.GetAllAsync(userId);
+            if (expenses == null || !expenses.Any())
                 return Result<IEnumerable<ExpenseResponseDto>>.Failure(ErrorType.NotFound, "No Expenses Record Yet");
 
             var response = expenses
@@ -64,9 +72,14 @@ namespace Spendly.Application.Services
 
         public async Task<Result<ExpenseResponseDto>> UpdateExpenseAsync(Guid id, ExpenseRequestDto dto)
         {
+            var userId = _jwtService.GetUserId();
             var expense = await _unitOfWork.Expenses.GetByIdAsync(id);
+
             if (expense == null)
                 return Result<ExpenseResponseDto>.Failure(ErrorType.NotFound, "Expenes not found");
+
+            if (expense.UserId != userId)
+                return Result<ExpenseResponseDto>.Failure(ErrorType.Forbidden, "You do not own this expense");
 
             expense.UpdateExpense(dto.Title, dto.Amount, dto.Description);
 

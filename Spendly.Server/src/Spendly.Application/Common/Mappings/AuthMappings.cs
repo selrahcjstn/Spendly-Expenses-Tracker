@@ -9,6 +9,7 @@ namespace Spendly.Application.Common.Mappings
         {
             return new AuthResponseDto
             {
+                Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
                 Token = token,

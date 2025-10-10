@@ -1,4 +1,5 @@
-﻿namespace Spendly.Application.Dtos.Expense
+﻿
+namespace Spendly.Application.Dtos.Expense
 {
     public class ExpenseCategoryDto
     {

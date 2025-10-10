@@ -47,13 +47,13 @@ namespace Spendly.Application.Services
             return Result<UserResponseDto>.Success(user.MapToUserToResponse());
         }
 
-        public async Task<Result<UserResponseDto>> UpdateEmailAsync(UpdateEmailRequestDto dto)
+        public async Task<Result<UserResponseDto>> UpdateEmailAsync(Guid id, UpdateEmailRequestDto dto)
         {
-            var emailExists = await _unitOfWork.Users.GetByEmailAsync(dto.Email);
-            if (emailExists != null)
+            var emailExists = await _unitOfWork.Users.CheckByEmailAsync(dto.Email, id);
+            if (emailExists)
                 return Result<UserResponseDto>.Failure(ErrorType.Conflict, "Email address already exists");
 
-            var user = await _unitOfWork.Users.GetByIdAsync(dto.Id);
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
             if (user == null)
                 return Result<UserResponseDto>.Failure(ErrorType.NotFound, "User not found");
 
@@ -64,6 +64,7 @@ namespace Spendly.Application.Services
 
             return Result<UserResponseDto>.Success(user.MapToUserToResponse());
         }
+
     }
 }
 

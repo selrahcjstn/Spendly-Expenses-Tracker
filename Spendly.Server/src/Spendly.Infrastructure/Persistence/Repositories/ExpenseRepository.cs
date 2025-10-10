@@ -1,4 +1,5 @@
-﻿using Spendly.Application.Interfaces.IRepositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Spendly.Application.Interfaces.IRepositories;
 using Spendly.Domain.Entities;
 using Spendly.Infrastructure.Persistence.Database;
 
@@ -24,19 +25,22 @@ namespace Spendly.Infrastructure.Persistence.Repositories
             _context.Expenses.Remove(expense);
         }
 
-        public Task<IEnumerable<Expense>> GetAllAsync()
+        public async Task<IEnumerable<Expense>> GetAllAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            return await _context.Expenses
+                .Where(e => e.UserId == userId)
+                .ToListAsync();
         }
 
-        public Task<Expense> GetByIdAsync(Guid id)
+        public async Task<Expense?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Expenses.FindAsync(id);
         }
 
         public Task UpdateAsync(Expense expenses)
         {
-            throw new NotImplementedException();
+            _context.Expenses.Update(expenses);
+            return Task.CompletedTask;
         }
     }
 }

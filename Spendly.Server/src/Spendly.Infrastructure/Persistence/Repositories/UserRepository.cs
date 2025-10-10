@@ -14,6 +14,11 @@ namespace Spendly.Infrastructure.Persistence.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);   
         }
 
+        public async Task<bool> CheckByEmailAsync(string email, Guid id)
+        {
+            return await _context.Users.AnyAsync(u => u.Email == email && u.Id != id);
+        }
+
         public async Task<User?> GetByIdAsync(Guid id)
         {
            return await _context.Users.FindAsync(id);
@@ -40,6 +45,6 @@ namespace Spendly.Infrastructure.Persistence.Repositories
         {
             _context.Users.Update(user);
             return Task.CompletedTask;
-        } 
+        }
     }
 }

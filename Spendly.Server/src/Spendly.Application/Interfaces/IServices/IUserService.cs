@@ -7,6 +7,6 @@ namespace Spendly.Application.Interfaces.IServices
     {
         Task<Result<UserResponseDto>> GetByIdAsync(Guid id);
         Task<Result<CreateUserResponseDto>> AddAsync(CreateUserRequestDto dto);
-        Task<Result<UserResponseDto>> UpdateEmailAsync(UpdateEmailRequestDto dto);
+        Task<Result<UserResponseDto>> UpdateEmailAsync(Guid id, UpdateEmailRequestDto dto);
     }
 }

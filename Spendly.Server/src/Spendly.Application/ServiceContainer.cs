@@ -21,6 +21,7 @@ namespace Spendly.Application
 
             // JWT Service
             services.AddSingleton<IJwtService, JwtService>();
+            services.AddHttpContextAccessor();
 
             return services;
         }

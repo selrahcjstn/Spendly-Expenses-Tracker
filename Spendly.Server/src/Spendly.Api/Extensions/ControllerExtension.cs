@@ -25,7 +25,6 @@ namespace Spendly.Api.Extensions
                     );
                 }
                return controller.Ok(result.Value);
-      
             }
 
             var statusCode = result.ErrorType switch
@@ -34,6 +33,7 @@ namespace Spendly.Api.Extensions
                 ErrorType.Conflict => HttpStatusCode.Conflict,
                 ErrorType.Unauthorized => HttpStatusCode.Unauthorized,
                 ErrorType.BadRequest => HttpStatusCode.BadRequest,
+                ErrorType.Forbidden => HttpStatusCode.Forbidden,
                 _ => HttpStatusCode.InternalServerError
             };
 
@@ -42,8 +42,6 @@ namespace Spendly.Api.Extensions
                 statusCode: (int)statusCode,
                 message: result.ErrorMessage
             );
-
-
         }
     }
 }

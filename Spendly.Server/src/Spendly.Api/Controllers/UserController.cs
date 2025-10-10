@@ -44,8 +44,7 @@ namespace Spendly.Api.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateEmail(Guid id, [FromBody] UpdateEmailRequestDto dto)
         {
-            dto.Id = id;
-            var result = await _userService.UpdateEmailAsync(dto);
+            var result = await _userService.UpdateEmailAsync(id, dto);
             return this.ToActionResult(result);
         }
     }
