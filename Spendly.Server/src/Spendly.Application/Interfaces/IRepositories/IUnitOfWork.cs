@@ -5,6 +5,7 @@
         IUserRepository Users { get; }
         IProfileRepository Profiles { get; }
         IExpenseRepository Expenses { get; }
+        ICategoryRepository Categories { get; }
         Task SaveChangesAsync();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Spendly.Api.Extensions;
 using Spendly.Application.Dtos.User;
@@ -14,14 +15,14 @@ namespace Spendly.Api.Controllers
         private readonly IValidator<CreateUserRequestDto> _validator = validator;
 
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetByIdAsync(Guid id)
         {
             var result = await _userService.GetByIdAsync(id);
             return this.ToActionResult(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateUserRequestDto dto)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateUserRequestDto dto)
         {
             var validationResult = await _validator.ValidateAsync(dto);
             if (!validationResult.IsValid)
@@ -32,17 +33,17 @@ namespace Spendly.Api.Controllers
             }
 
             var result = await _userService.AddAsync(dto);
-            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(result));
 
             return this.ToActionResult(
                 result, 
-                createdAtActionName: nameof(GetById),
+                createdAtActionName: nameof(GetByIdAsync),
                 routeValues: new { id = result.Value?.Id }
             );
         }
 
+        [Authorize]
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateEmail(Guid id, [FromBody] UpdateEmailRequestDto dto)
+        public async Task<IActionResult> UpdateEmailAsync(Guid id, [FromBody] UpdateEmailRequestDto dto)
         {
             var result = await _userService.UpdateEmailAsync(id, dto);
             return this.ToActionResult(result);

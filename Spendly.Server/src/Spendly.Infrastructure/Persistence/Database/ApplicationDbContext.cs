@@ -10,5 +10,6 @@ namespace Spendly.Infrastructure.Persistence.Database
         public DbSet<User> Users { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Expense> Expenses { get; set; }
+        public DbSet<ExpensesCategory> Categories { get; set; }
     }
 }

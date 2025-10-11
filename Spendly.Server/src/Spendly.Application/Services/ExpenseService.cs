@@ -15,16 +15,29 @@ namespace Spendly.Application.Services
 
         public async Task<Result<ExpenseResponseDto>> AddExpenseAsync(ExpenseRequestDto dto)
         {
-            var expense = new Expense(dto.Title, dto.Amount, dto.Description)
+            var userId = _jwtService.GetUserId();
+
+            var expense = new Expense(dto.Title, dto.Amount, dto.Description, dto.CustomCategory)
             {
-                UserId = _jwtService.GetUserId()
+                UserId = userId,
+                CreatedAt = DateTime.UtcNow
             };
+
+            if (dto.CategoryIds != null && dto.CategoryIds.Count != 0)
+            {
+                var categories = await _unitOfWork.Categories
+                    .GetAllByIdsAsync(dto.CategoryIds);
+
+                foreach (var category in categories)
+                {
+                    expense.Category.Add(category);
+                }
+            }
 
             await _unitOfWork.Expenses.AddAsync(expense);
             await _unitOfWork.SaveChangesAsync();
 
             var response = expense.ToResponseDto();
-
             return Result<ExpenseResponseDto>.Success(response);
         }
 

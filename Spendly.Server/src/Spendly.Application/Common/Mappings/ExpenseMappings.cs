@@ -1,5 +1,4 @@
 ﻿using Spendly.Application.Dtos.Expense;
-using Spendly.Application.Dtos.Profile;
 using Spendly.Domain.Entities;
 
 namespace Spendly.Application.Common.Mappings
@@ -16,13 +15,8 @@ namespace Spendly.Application.Common.Mappings
                 Description = expense.Description,
                 CreatedAt = expense.CreatedAt,
                 UpdatedAt = expense.UpdatedAt,
-                Category = expense.Category?
-                    .Select(c => new ExpenseCategoryDto
-                    {
-                        Id = c.Id,
-                        Name = c.Category
-                    })
-                    .ToList() ?? []
+                CategoryIds = [.. expense.Category.Select(c => c.Id)],
+                CustomCategory = expense.CustomCategory,
             };
         }
     }

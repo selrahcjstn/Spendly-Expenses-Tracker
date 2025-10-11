@@ -18,6 +18,7 @@ namespace Spendly.Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IExpenseRepository, ExpenseRepository>();
             services.AddScoped<IProfileRepository, ProfileRepostory>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

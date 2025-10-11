@@ -29,6 +29,7 @@ namespace Spendly.Infrastructure.Persistence.Repositories
         {
             return await _context.Expenses
                 .Where(e => e.UserId == userId)
+                .OrderByDescending(e => e.UpdatedAt ?? e.CreatedAt)
                 .ToListAsync();
         }
 

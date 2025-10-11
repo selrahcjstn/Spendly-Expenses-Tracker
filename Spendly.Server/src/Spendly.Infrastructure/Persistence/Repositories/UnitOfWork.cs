@@ -12,12 +12,15 @@ namespace Spendly.Infrastructure.Persistence.Repositories
 
         public IExpenseRepository Expenses { get; }
 
+        public ICategoryRepository Categories { get; }
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
             Users = new UserRepository(_context);
             Profiles = new ProfileRepostory(_context);
             Expenses =  new ExpenseRepository(_context);
+            Categories = new CategoryRepository(_context);
         }
 
         public async Task SaveChangesAsync()

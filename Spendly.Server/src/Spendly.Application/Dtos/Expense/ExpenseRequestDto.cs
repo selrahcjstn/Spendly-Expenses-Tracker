@@ -1,6 +1,4 @@
-﻿using Spendly.Domain.Entities;
-
-namespace Spendly.Application.Dtos.Expense
+﻿namespace Spendly.Application.Dtos.Expense
 {
     public class ExpenseRequestDto
     {
@@ -9,6 +7,7 @@ namespace Spendly.Application.Dtos.Expense
         public string? Description { get; set; }
 
         // Category many to many
-        public ICollection<ExpenseCategoryDto> Category { get; set; } = [];
+        public ICollection<Guid> CategoryIds { get; set; } = [];
+        public string? CustomCategory { get; set; }
     }
 }

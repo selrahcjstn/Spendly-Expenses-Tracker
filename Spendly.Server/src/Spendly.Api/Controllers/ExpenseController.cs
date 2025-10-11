@@ -13,9 +13,8 @@ namespace Spendly.Api.Controllers
     {
         private readonly IExpenseService _expenseService = expenseService;
 
-
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetByIdAsync(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _expenseService.GetExpenseByIdAsync(id);
             return this.ToActionResult(result);
@@ -32,7 +31,14 @@ namespace Spendly.Api.Controllers
         public async Task<IActionResult> CreateAsync([FromBody] ExpenseRequestDto dto)
         {
             var result = await _expenseService.AddExpenseAsync(dto);
-            return this.ToActionResult(result);
+            
+            Console.WriteLine($"Expense created ID: {result.Value?.Id}");
+
+            return this.ToActionResult(
+                result,
+                createdAtActionName: nameof(GetById),
+                routeValues: new { id = result.Value?.Id }
+            );
         }
 
         [HttpPut("{id:guid}")]

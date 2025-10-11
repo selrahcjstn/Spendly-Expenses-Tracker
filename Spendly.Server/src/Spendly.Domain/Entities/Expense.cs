@@ -16,15 +16,19 @@
         // Category many to many
         public ICollection<ExpensesCategory> Category { get; set; } = [];
 
+        // Custom Category
+        public String? CustomCategory { get; set; }
+
         public Expense() { }
 
-        public Expense(string title, decimal amount, string? description)
+        public Expense(string title, decimal amount, string? description, string? customeCategory)
         {
             Id = Guid.NewGuid();
             Title = title;
             Amount = amount;
             Description = description;
             CreatedAt = DateTime.UtcNow;
+            CustomCategory = customeCategory;
         }
 
         public void UpdateExpense(string title, decimal amount, string? description)

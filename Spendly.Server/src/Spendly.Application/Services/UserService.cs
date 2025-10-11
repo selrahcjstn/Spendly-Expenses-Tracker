@@ -9,15 +9,15 @@ using Spendly.Domain.Entities;
 
 namespace Spendly.Application.Services
 {
-    public class UserService(IUnitOfWork unitOfWork, IPasswordHasher<User> hasher) : IUserService
+    public class UserService(IUnitOfWork unitOfWork, IPasswordHasher<User> hasher, IJwtService jwtService) : IUserService
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IPasswordHasher<User> _hasher = hasher;
+        private readonly IJwtService _jwtService = jwtService;
 
         public async Task<Result<CreateUserResponseDto>> AddAsync(CreateUserRequestDto dto)
         {
             var existingUser = await _unitOfWork.Users.GetByEmailOrUserAsync(dto.Username, dto.Email);
-
             if (existingUser?.Username == dto.Username)
                 return Result<CreateUserResponseDto>.Failure(ErrorType.Conflict, "Username already exists!");
 
@@ -49,7 +49,12 @@ namespace Spendly.Application.Services
 
         public async Task<Result<UserResponseDto>> UpdateEmailAsync(Guid id, UpdateEmailRequestDto dto)
         {
+            var userId = _jwtService.GetUserId();
             var emailExists = await _unitOfWork.Users.CheckByEmailAsync(dto.Email, id);
+
+            if(id !=  userId)
+                return Result<UserResponseDto>.Failure(ErrorType.Forbidden, "You do not own this account!");
+
             if (emailExists)
                 return Result<UserResponseDto>.Failure(ErrorType.Conflict, "Email address already exists");
 
