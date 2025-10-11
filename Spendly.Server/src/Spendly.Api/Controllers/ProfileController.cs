@@ -16,6 +16,14 @@ namespace Spendly.Api.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
+            var validationResult = await _validator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToArray();
+
+                return this.InvalidInput(message: errors);
+            }
+
             var result = await _profileService.GetProfileByIdAsync(id);
 
             return this.ToActionResult(result);

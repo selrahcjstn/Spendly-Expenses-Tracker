@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Spendly.Api.Extensions;
 using Spendly.Application.Dtos.Expense;
@@ -9,9 +10,10 @@ namespace Spendly.Api.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ExpenseController(IExpenseService expenseService) : ControllerBase
+    public class ExpenseController(IExpenseService expenseService, IValidator<ExpenseRequestDto> validator) : ControllerBase
     {
         private readonly IExpenseService _expenseService = expenseService;
+        private readonly IValidator<ExpenseRequestDto> _validator = validator;
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
@@ -30,6 +32,14 @@ namespace Spendly.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] ExpenseRequestDto dto)
         {
+            var validationResult = await _validator.ValidateAsync(dto);
+            if(!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToArray();
+
+                return this.InvalidInput(message: errors);
+            }
+
             var result = await _expenseService.AddExpenseAsync(dto);
             
             Console.WriteLine($"Expense created ID: {result.Value?.Id}");
@@ -44,6 +54,14 @@ namespace Spendly.Api.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] ExpenseRequestDto dto)
         {
+            var validationResult = await _validator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToArray();
+
+                return this.InvalidInput(message: errors);
+            }
+
             var result = await _expenseService.UpdateExpenseAsync(id, dto);
             return this.ToActionResult(result);
         }

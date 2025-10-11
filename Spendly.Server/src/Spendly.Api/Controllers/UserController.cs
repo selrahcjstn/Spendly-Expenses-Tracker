@@ -9,13 +9,18 @@ namespace Spendly.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(IUserService userService, IValidator<CreateUserRequestDto> validator) : ControllerBase
+    public class UserController(
+        IUserService userService, 
+        IValidator<CreateUserRequestDto> validator, 
+        IValidator<UpdateEmailRequestDto> emailValidator) 
+        : ControllerBase
     {
         private readonly IUserService _userService = userService;
         private readonly IValidator<CreateUserRequestDto> _validator = validator;
+        private readonly IValidator<UpdateEmailRequestDto> _emaiLValidator = emailValidator;
 
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetByIdAsync(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _userService.GetByIdAsync(id);
             return this.ToActionResult(result);
@@ -36,7 +41,7 @@ namespace Spendly.Api.Controllers
 
             return this.ToActionResult(
                 result, 
-                createdAtActionName: nameof(GetByIdAsync),
+                createdAtActionName: nameof(GetById),
                 routeValues: new { id = result.Value?.Id }
             );
         }
@@ -45,6 +50,14 @@ namespace Spendly.Api.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateEmailAsync(Guid id, [FromBody] UpdateEmailRequestDto dto)
         {
+            var validationResult = await _emaiLValidator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToArray();
+
+                return this.InvalidInput(message: errors);
+            }
+
             var result = await _userService.UpdateEmailAsync(id, dto);
             return this.ToActionResult(result);
         }
