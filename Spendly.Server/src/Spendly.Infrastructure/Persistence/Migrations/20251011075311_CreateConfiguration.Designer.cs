@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Spendly.Infrastructure.Persistence.Database;
 
@@ -11,9 +12,11 @@ using Spendly.Infrastructure.Persistence.Database;
 namespace Spendly.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251011075311_CreateConfiguration")]
+    partial class CreateConfiguration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,19 +25,19 @@ namespace Spendly.Infrastructure.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ExpenseCategoryLink", b =>
+            modelBuilder.Entity("ExpenseExpensesCategory", b =>
                 {
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ExpenseId")
+                    b.Property<Guid>("ExpensesId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("CategoryId", "ExpenseId");
+                    b.HasKey("CategoryId", "ExpensesId");
 
-                    b.HasIndex("ExpenseId");
+                    b.HasIndex("ExpensesId");
 
-                    b.ToTable("ExpenseCategoryLink");
+                    b.ToTable("ExpenseExpensesCategory");
                 });
 
             modelBuilder.Entity("Spendly.Domain.Entities.Expense", b =>
@@ -44,24 +47,20 @@ namespace Spendly.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CustomCategory")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -73,7 +72,7 @@ namespace Spendly.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Expense", (string)null);
+                    b.ToTable("Expenses");
                 });
 
             modelBuilder.Entity("Spendly.Domain.Entities.ExpensesCategory", b =>
@@ -88,7 +87,7 @@ namespace Spendly.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Spendly.Domain.Entities.Profile", b =>
@@ -105,17 +104,14 @@ namespace Spendly.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Firstname")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MiddleName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sex")
                         .IsRequired()
@@ -129,7 +125,7 @@ namespace Spendly.Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Profile", (string)null);
+                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("Spendly.Domain.Entities.User", b =>
@@ -139,13 +135,11 @@ namespace Spendly.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -156,21 +150,14 @@ namespace Spendly.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("Username")
-                        .IsUnique();
-
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ExpenseCategoryLink", b =>
+            modelBuilder.Entity("ExpenseExpensesCategory", b =>
                 {
                     b.HasOne("Spendly.Domain.Entities.ExpensesCategory", null)
                         .WithMany()
@@ -180,7 +167,7 @@ namespace Spendly.Infrastructure.Persistence.Migrations
 
                     b.HasOne("Spendly.Domain.Entities.Expense", null)
                         .WithMany()
-                        .HasForeignKey("ExpenseId")
+                        .HasForeignKey("ExpensesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Spendly.Domain.Entities;
+using Spendly.Infrastructure.Persistence.Database.Configuration;
 
 namespace Spendly.Infrastructure.Persistence.Database
 {
@@ -11,5 +12,15 @@ namespace Spendly.Infrastructure.Persistence.Database
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<ExpensesCategory> Categories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new ProfileConfiguration());
+            modelBuilder.ApplyConfiguration(new ExpenseCategoryConfiguration());
+        }
     }
 }

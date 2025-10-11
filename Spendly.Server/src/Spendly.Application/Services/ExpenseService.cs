@@ -28,9 +28,6 @@ namespace Spendly.Application.Services
                 var categories = await _unitOfWork.Categories
                     .GetAllByIdsAsync(dto.CategoryIds);
 
-                if (categories == null || !categories.Any())
-                    return Result<ExpenseResponseDto>.Failure(ErrorType.BadRequest, "Selected Category does not exist");
-
                 foreach (var category in categories)
                 {
                     expense.Category.Add(category);
