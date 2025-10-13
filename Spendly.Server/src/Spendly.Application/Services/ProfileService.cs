@@ -4,13 +4,13 @@ using Spendly.Application.Common.Result;
 using Spendly.Application.Dtos.Profile;
 using Spendly.Application.Interfaces.IRepositories;
 using Spendly.Application.Interfaces.IServices;
-using Spendly.Domain.Entities;
 
 namespace Spendly.Application.Services
 {
-    public class ProfileService(IUnitOfWork unitOfWork) : IProfileService
+    public class ProfileService(IUnitOfWork unitOfWork, IJwtService jwtService) : IProfileService
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IJwtService _jwtService = jwtService;   
 
         public async Task<Result<ProfileResponseDto>> GetProfileByIdAsync(Guid id)
         {
@@ -27,9 +27,21 @@ namespace Spendly.Application.Services
             return Result<ProfileResponseDto>.Success(newProfile);
         }
 
-        public Task<Result<ProfileResponseDto>> UpdateProfileAsync(ProfileRequestDto dto)
+        public async Task<Result<ProfileResponseDto>> UpdateProfileAsync(ProfileRequestDto dto)
         {
-            throw new NotImplementedException();
+            var userId = _jwtService.GetUserId();
+
+            var userProfile = await _unitOfWork.Profiles.GetByIdAsync(userId);
+            if (userProfile == null)
+                return Result<ProfileResponseDto>.Failure(ErrorType.NotFound, "User not found");
+
+            userProfile.UpdateProfile(dto.Firstname, dto.LastName, dto.MiddleName, dto.Sex, dto.BirthDate);
+
+            await _unitOfWork.Profiles.Update(userProfile); 
+            await _unitOfWork.SaveChangesAsync();
+
+            var response = userProfile.MapToProfileResponse();
+            return Result<ProfileResponseDto>.Success(response);
         }
     }
 }

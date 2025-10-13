@@ -20,8 +20,8 @@ namespace Spendly.Application.Validators.Expense
                 .LessThanOrEqualTo(1000000).WithMessage("Amount exceed the maximum allowed limit");
 
             RuleFor(x => x)
-            .Must(x => (x.CategoryIds != null && x.CategoryIds.Any())|| !string.IsNullOrWhiteSpace(x.CustomCategory))
-            .WithMessage("Either select at least one category or provide a custom category.");
+                .Must(x => (x.CategoryIds != null && x.CategoryIds.Count != 0) || !string.IsNullOrWhiteSpace(x.CustomCategory))
+                .WithMessage("Either select at least one category or provide a custom category.");
         }
     }
 }

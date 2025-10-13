@@ -20,8 +20,8 @@
         public User(string username, string email, string password)
         {
             Id = Guid.NewGuid();
-            Username = username;
-            Email = email;
+            Username = username.ToLower();
+            Email = email.ToLower();
             Password = password;
             CreatedAt = DateTime.UtcNow;
         }
@@ -37,7 +37,7 @@
             if (string.IsNullOrEmpty(email) || !email.Contains('@'))
                 throw new ArgumentException("Invalid email format!");
 
-            Email = email;
+            Email = email.ToLower();
             UpdatedAt = DateTime.UtcNow;
         }
     }

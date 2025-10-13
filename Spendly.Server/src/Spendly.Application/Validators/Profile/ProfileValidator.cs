@@ -3,9 +3,9 @@ using Spendly.Application.Dtos.Profile;
 
 namespace Spendly.Application.Validators.Profile
 {
-    public class CreateProfileValidator : AbstractValidator<ProfileRequestDto>
+    public class ProfileValidator : AbstractValidator<ProfileRequestDto>
     {
-        public CreateProfileValidator()
+        public ProfileValidator()
         {
             RuleFor(x => x.Firstname)
                 .NotEmpty().WithMessage("First name is required")

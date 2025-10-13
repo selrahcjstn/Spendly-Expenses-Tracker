@@ -2,7 +2,6 @@
 {
     public class ProfileRequestDto
     {
-        public Guid UserId { get; set; }
         public string Firstname { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string? MiddleName { get; set; }

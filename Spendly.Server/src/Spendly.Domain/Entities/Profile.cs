@@ -19,9 +19,9 @@
         public Profile(string firstName, string lastName, string? middleName, string sex, DateOnly birthDate)
         {
             Id = Guid.NewGuid();
-            Firstname = firstName;
-            LastName = lastName;
-            MiddleName = middleName;
+            Firstname = Capitalize(firstName);
+            LastName = Capitalize(lastName);
+            MiddleName = middleName != null ? Capitalize(middleName) : null;
             Sex = sex;
             BirthDate = birthDate;
         }
@@ -31,5 +31,22 @@
             User = user;
             UserId = user.Id;
         }
+
+        public void UpdateProfile(string firstName, string lastName, string? middleName, string sex, DateOnly birhtDate)
+        {
+            Firstname = Capitalize(firstName);
+            LastName = Capitalize(lastName);
+            MiddleName = middleName != null ? Capitalize(middleName) : null;
+            Sex = sex;
+            BirthDate = birhtDate;
+        }
+
+        private string Capitalize(string name)
+        {
+            name = name.Trim();
+            return System.Globalization.CultureInfo.CurrentCulture.TextInfo
+                .ToTitleCase(name.ToLower());
+        }
+
     }
 }
