@@ -6,6 +6,7 @@
         IProfileRepository Profiles { get; }
         IExpenseRepository Expenses { get; }
         ICategoryRepository Categories { get; }
+        IRefreshTokenRepository RefreshTokens { get; }
         Task SaveChangesAsync();
     }
 }

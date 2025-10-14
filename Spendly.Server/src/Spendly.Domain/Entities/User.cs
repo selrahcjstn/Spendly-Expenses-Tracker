@@ -14,7 +14,10 @@
 
         // Expenses one to many
         public ICollection<Expense> Expenses { get; set; } = [];
-        
+
+        // RefreshToken
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = [];
+
         public User() { }
 
         public User(string username, string email, string password)

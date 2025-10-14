@@ -13,6 +13,7 @@ namespace Spendly.Infrastructure.Persistence.Repositories
         public IExpenseRepository Expenses { get; }
 
         public ICategoryRepository Categories { get; }
+        public IRefreshTokenRepository RefreshTokens { get; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -21,6 +22,7 @@ namespace Spendly.Infrastructure.Persistence.Repositories
             Profiles = new ProfileRepostory(_context);
             Expenses =  new ExpenseRepository(_context);
             Categories = new CategoryRepository(_context);
+            RefreshTokens = new RefreshTokenRepository(_context);
         }
 
         public async Task SaveChangesAsync()

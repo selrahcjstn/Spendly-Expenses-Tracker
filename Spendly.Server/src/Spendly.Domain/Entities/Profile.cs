@@ -36,12 +36,12 @@
         {
             Firstname = Capitalize(firstName);
             LastName = Capitalize(lastName);
-            MiddleName = middleName != null ? Capitalize(middleName) : null;
+            MiddleName = middleName != null ? Capitalize(middleName) : null; 
             Sex = sex;
             BirthDate = birhtDate;
         }
 
-        private string Capitalize(string name)
+        private static string Capitalize(string name)
         {
             name = name.Trim();
             return System.Globalization.CultureInfo.CurrentCulture.TextInfo

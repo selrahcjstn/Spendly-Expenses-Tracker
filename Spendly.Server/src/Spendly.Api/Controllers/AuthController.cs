@@ -28,5 +28,13 @@ namespace Spendly.Api.Controllers
 
             return this.ToActionResult(result);
         }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequestDto dto)
+        {
+            var result = await _authService.RefreshTokenAsync(dto);
+            return this.ToActionResult(result);
+        }
+
     }
 }

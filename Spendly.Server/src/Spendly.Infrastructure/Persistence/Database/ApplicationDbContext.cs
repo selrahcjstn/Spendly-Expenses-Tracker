@@ -12,6 +12,7 @@ namespace Spendly.Infrastructure.Persistence.Database
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<ExpensesCategory> Categories { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
